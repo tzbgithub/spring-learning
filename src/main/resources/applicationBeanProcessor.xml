@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+       default-init-method="init"
+>
+
+
+
+    <bean class="com.tzb.springlearning.beanPostProcessor.filedsProcess.BeanProcessor">
+    </bean>
+
+    <bean id="beanProcessorDemo" class="com.tzb.springlearning.beanPostProcessor.filedsProcess.BeanProcesssorDemo">
+        <constructor-arg name="str" value="construct str" />
+        <property name="str" value="property str"/>
+    </bean>
+</beans>

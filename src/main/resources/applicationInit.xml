@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <bean id="init" class="com.tzb.springlearning.init.InitBean" init-method="init"></bean>
+    
+    <bean id = "drinkContainsbean1" class="com.tzb.springlearning.parent.DrinkContainBean">
+        <property name="name" value="水杯"/>
+        
+    </bean>
+    
+    <bean id = "drinkbean1" class="com.tzb.springlearning.parent.DrinkBean" abstract="true">
+        <property name="thing" value="tea"></property>
+        <property name="drinkContainBean" ref="drinkContainsbean1"></property>
+    </bean>
+
+    <!--继承复用实例-->
+    <bean id = "drinkbean2" parent="drinkbean1">
+<!--        <property name="thing" value="milk"></property>-->
+    </bean>
+
+    <bean id ="drinkbean3" parent="drinkbean1"></bean>
+</beans>

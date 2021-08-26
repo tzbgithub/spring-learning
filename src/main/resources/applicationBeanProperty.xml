@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+       default-init-method="init"
+>
+
+    <bean id="load_property_1" class="org.springframework.beans.factory.config.PropertyOverrideConfigurer">
+        <property name="location" value="bean_1.properties"/>
+    </bean>
+
+
+    <bean id="load_property_2" class="org.springframework.beans.factory.config.PropertyOverrideConfigurer">
+        <property name="location" value="bean_2.properties"/>
+        <property name="order" value="1"/> <!--指定bean的加载顺序-->
+    </bean>
+    <!--使用placeholderConfigurer-->
+    <bean id="load_property_3" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="bean_3.properties"/>
+        <property name="ignoreUnresolvablePlaceholders" value="true"/>
+    </bean>
+
+    <bean id="bean_override" class="com.tzb.springlearning.propertyFile.BeanProperty">
+        <property name="property1" value="property1"/>
+    </bean>
+
+    <bean id="bean_placeholder" class="com.tzb.springlearning.propertyFile.BeanProperty">
+        <property name="property3" value="${property3}"/>
+        <property name="property4" value="${property4}"/>
+    </bean>
+
+    <bean id="load_property_3+4" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:/bean_3.properties</value>
+                <value>classpath:/bean_4.properties</value>
+            </list>
+
+        </property>
+    </bean>
+
+
+
+</beans>

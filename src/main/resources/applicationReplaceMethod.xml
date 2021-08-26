@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <bean id="traffic" class="com.tzb.springlearning.replaceMethod.Traffic"></bean>
+
+    <bean id="trafficReplace" class="com.tzb.springlearning.replaceMethod.TrafficReplace">
+
+    </bean>
+
+    <bean id = "trafficBean" class="com.tzb.springlearning.replaceMethod.Traffic">
+        <replaced-method name="goByBike" replacer="trafficReplace"
+        >
+            <arg-type match="java.lang.String"></arg-type>
+            <arg-type match="java.lang.String"></arg-type>
+        </replaced-method>
+    </bean>
+
+
+
+
+</beans>

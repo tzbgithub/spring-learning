@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+"
+>
+<!--    会去发现configurable注解的类-->
+<!--    添加这标签后，会建立aspect-j的切面，
+它的切点会在configurable注解修饰的类被实例化的时候触发-->
+    <context:spring-configured/>
+
+    <bean id = "beanRef" class="com.tzb.springlearning.notSpringBean.BeanRef"></bean>
+    <bean id ="beanConfigurable" class="com.tzb.springlearning.notSpringBean.BeanConfigurable" abstract="true">
+        <property name="info" value="this is info"/>
+        <property name="beanRef" ref="beanRef"/>
+    </bean>
+
+
+</beans>
