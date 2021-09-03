@@ -1,9 +1,15 @@
 package com.tzb.springlearning;
 
+import com.tzb.springlearning.aop.AopPerformer;
+import com.tzb.springlearning.aop.Performer;
+import com.tzb.springlearning.aop.Viewer;
+import com.tzb.springlearning.beanAware.BeanAppAwareImpl;
+import com.tzb.springlearning.beanAware.BeanNameAwareImpl;
 import com.tzb.springlearning.beanFactoryPostProcessor.BeanFactoryDemo;
 import com.tzb.springlearning.beanPostProcessor.annotation.BeanAnnotation;
 import com.tzb.springlearning.beanPostProcessor.filedsProcess.BeanProcesssorDemo;
 import com.tzb.springlearning.beanReplace.Lookup;
+import com.tzb.springlearning.event.CustomEvent;
 import com.tzb.springlearning.notSpringBean.BeanConfigurable;
 import com.tzb.springlearning.parent.DrinkBean;
 import com.tzb.springlearning.propertyBean.BeanContact;
@@ -14,7 +20,12 @@ import com.tzb.springlearning.replaceMethod.Traffic;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.MessageSource;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import java.util.Arrays;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 @SpringBootTest
 class SpringLearningApplicationTests {
@@ -121,7 +132,71 @@ class SpringLearningApplicationTests {
         ApplicationContext context = new ClassPathXmlApplicationContext("applicationBeanProperty2.xml");
         BeanProperty bean =(BeanProperty) context.getBean("bean_placeholder_url");
         System.out.println(bean.getUrl());
-
     }
+    @Test
+    void  testMessageCN(){
+        MessageSource ms = new ClassPathXmlApplicationContext("applicationMessage.xml");
+        String message = ms.getMessage("msg.txt", null, "Default", null);
+        System.out.println(message);
+    }
+    @Test
+    void  testMessageUS(){
+        Locale loc = Locale.US;
+        MessageSource ms = new ClassPathXmlApplicationContext("applicationMessage.xml");
+        String message = ms.getMessage("msg.txt", null, "Default", loc);
+        System.out.println(message);
+    }
+
+    @Test
+    void  testMessageLocale(){
+        Locale loc = Locale.getDefault();
+        ResourceBundle bundle = ResourceBundle.getBundle("message", loc);
+        System.out.println(bundle.getString("msg.txt"));
+    }
+
+    @Test
+    void  testEvent(){
+        ApplicationContext context = new ClassPathXmlApplicationContext("applicationEvent.xml");
+        CustomEvent event = new CustomEvent(this, "测试自定义的事件");
+        context.publishEvent(event);
+    }
+
+    @Test
+    void  testBeanAware(){
+        ApplicationContext context = new ClassPathXmlApplicationContext("applicationBeanAware.xml");
+        String[] beanNames = context.getBeanDefinitionNames();
+        for (String name:
+             beanNames) {
+            BeanNameAwareImpl bean = (BeanNameAwareImpl)context.getBean(name);
+            bean.setBeanName("t_" + name);
+        }
+        System.out.println(Arrays.toString(context.getBeanDefinitionNames()));
+    }
+    @Test
+    void  testBeanAppAware() {
+        ApplicationContext context = new ClassPathXmlApplicationContext("applicationBeanAware.xml");
+        BeanAppAwareImpl bean = (BeanAppAwareImpl) context.getBean("beanAppAwareImpl");
+        BeanNameAwareImpl bean2 = bean.getBean("beanNameAwareImpl");
+        System.out.println(bean2.getBeanName());
+    }
+    @Test
+    void  testNoAop() {
+        ApplicationContext context = new ClassPathXmlApplicationContext("applicationAop.xml");
+        Viewer viewer = (Viewer) context.getBean("viewer");
+        Performer performer = (Performer) context.getBean("performer");
+        performer.setViewer(viewer);
+        performer.perform();
+    }
+
+    @Test
+    void testAop() {
+        ApplicationContext context = new ClassPathXmlApplicationContext("applicationAop.xml");
+        AopPerformer performer = (AopPerformer) context.getBean("beanProxy");
+        performer.perform();
+    }
+
+
+
+
 
 }

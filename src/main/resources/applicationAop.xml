@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+       default-init-method="init"
+>
+
+    <bean id="performer" class="com.tzb.springlearning.aop.Performer">
+        <property name="viewer" ref="viewer"/>
+    </bean>
+
+    <bean id="viewer" class="com.tzb.springlearning.aop.Viewer"/>
+
+    <bean id ="aopPerform" class="com.tzb.springlearning.aop.AopPerformer"/>
+
+    <bean id="pointCut" class="org.springframework.aop.support.JdkRegexpMethodPointcut">
+        <property name="pattern" value=".*perform"/>
+    </bean>
+
+    <bean id = "beanAdvice" class="com.tzb.springlearning.aop.BeanAdvice" >
+        <property name="viewer" ref="viewer"/>
+    </bean>
+
+    <bean name="advisor" class="org.springframework.aop.support.DefaultPointcutAdvisor" >
+        <property name="pointcut" ref="pointCut"/>
+        <property name="advice" ref="beanAdvice"/>
+    </bean>
+
+    <bean id ="beanProxy" class="org.springframework.aop.framework.ProxyFactoryBean">
+        <property name="target" ref="aopPerform"/>
+        <property name="interceptorNames">
+            <list>
+                <value>advisor</value>
+            </list>
+        </property>
+    </bean>
+</beans>
